@@ -119,6 +119,17 @@ func RunServer() {
 	feApp.Get("/contents", contentHandler.GetContentWithQuery)
 	feApp.Get("/contents/:contentID", contentHandler.GetContentDetail)
 
+	// Start server
+	log.Println("Starting server on port:", cfg.App.AppPort)
+	if cfg.App.AppPort == "" {
+		cfg.App.AppPort = os.Getenv("APP_PORT")
+	}
+
+	err = app.Listen(":" + cfg.App.AppPort)
+	if err != nil {
+		log.Fatal("Could not start server: %v", err)
+	}
+
 	go func() {
 		if cfg.App.AppPort == "" {
 			cfg.App.AppPort = os.Getenv("APP_PORT")
